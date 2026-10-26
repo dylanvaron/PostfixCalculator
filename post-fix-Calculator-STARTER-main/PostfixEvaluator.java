@@ -42,6 +42,9 @@ public class PostfixEvaluator {
                     if (int1 == 0) {
                         throw new ArithmeticException("You cannot divide by 0");
                     }
+                    else {
+                        stack.push(int2 / int1)
+                    }
                 }
             }
             else {
