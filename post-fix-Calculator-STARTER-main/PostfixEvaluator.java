@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Stack;
 
 /** STUDENT FILE: Complete evaluate. Leave all other project files unchanged. */
 public class PostfixEvaluator {
@@ -11,8 +10,9 @@ public class PostfixEvaluator {
      * @throws ArithmeticException for division by zero
      */
     public static int evaluate(String expression) throws ArithmeticException {
-        Stack<Integer> stack = new Stack<>();
+        ArrayStack<Integer> stack = new ArrayStack<>();
         Scanner tokens = new Scanner(expression);
+        int stackSize = 0;
 
         while(tokens.hasNext()) {
             if (expression == null || expression.isBlank()) {
@@ -21,21 +21,28 @@ public class PostfixEvaluator {
             
             String s = tokens.next();
             if(s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")) {
-                if (stack.size() < 2) {
+                if (stackSize < 2) {
                     throw new PostFixException("Not enough operands");
                 }
                 
-                int int1 = stack.pop();
-                int int2 = stack.pop();
+                int int1 = stack.top();
+                stackSize--;
+                stack.pop();
+                int int2 = stack.top(); 
+                stackSize--;
+                stack.pop();
 
                 if(s.equals("+")) {
                     stack.push(int2 + int1);
+                    stackSize++;
                 }
                 else if(s.equals("-")) {
                     stack.push(int2 - int1);
+                    stackSize++;
                 }
                 else if(s.equals("*")) {
                     stack.push(int2 * int1);
+                    stackSize++;
                 }
                 else if(s.equals("/")) {
                     if (int1 == 0) {
@@ -43,12 +50,14 @@ public class PostfixEvaluator {
                     }
                     else {
                         stack.push(int2 / int1);
+                        stackSize++;
                     }
                 }
             }
             else {
                 try {
                     stack.push(Integer.parseInt(s));
+                    stackSize++;
                 }
                 catch (NumberFormatException e) {
                     throw new PostFixException("That is not a real number");
@@ -68,8 +77,10 @@ public class PostfixEvaluator {
         // Close the Scanner when you are finished.
 
         tokens.close();
-        if (stack.size() == 1) {
-            return stack.pop();
+        if (stackSize == 1) {
+            int toReturn = stack.top();
+            stack.pop();
+            return toReturn;
         } else {
             throw new PostFixException("Ill form");
         }
