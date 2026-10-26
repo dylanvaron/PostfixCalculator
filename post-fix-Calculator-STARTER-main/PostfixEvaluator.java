@@ -24,10 +24,9 @@ public class PostfixEvaluator {
                 if (stack.size() < 2) {
                     throw new PostFixException("Not enough operands");
                 }
-                else {
-                    int int1 = stack.pop();
-                    int int2 = stack.pop();
-                }
+                
+                int int1 = stack.pop();
+                int int2 = stack.pop();
 
                 if(s.equals("+")) {
                     stack.push(int2 + int1);
@@ -43,7 +42,7 @@ public class PostfixEvaluator {
                         throw new ArithmeticException("You cannot divide by 0");
                     }
                     else {
-                        stack.push(int2 / int1)
+                        stack.push(int2 / int1);
                     }
                 }
             }
@@ -70,7 +69,7 @@ public class PostfixEvaluator {
 
         tokens.close();
         if (stack.size() == 1) {
-            return numToReturn;
+            return stack.pop();
         } else {
             throw new PostFixException("Ill form");
         }
