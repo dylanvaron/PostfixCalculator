@@ -15,10 +15,19 @@ public class PostfixEvaluator {
         Scanner tokens = new Scanner(expression);
 
         while(tokens.hasNext()) {
+            if (expression == null || expression.isBlank()) {
+                throw new PostFixException("Expression cannot be blank");
+            }
+            
             String s = tokens.next();
             if(s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")) {
-                int int1 = stack.pop();
-                int int2 = stack.pop();
+                if (stack.size() < 2) {
+                    throw new PostFixException("Not enough operands");
+                }
+                else {
+                    int int1 = stack.pop();
+                    int int2 = stack.pop();
+                }
 
                 if(s.equals("+")) {
                     stack.push(int2 + int1);
@@ -30,11 +39,8 @@ public class PostfixEvaluator {
                     stack.push(int2 * int1);
                 }
                 else if(s.equals("/")) {
-                    try {
-                        stack.push(int2 / int1);
-                    }
-                    catch (ArithmeticException e) {
-                        throw new ArithmeticException("u cant divide by 0 lol");
+                    if (int1 == 0) {
+                        throw new ArithmeticException("You cannot divide by 0");
                     }
                 }
             }
@@ -43,7 +49,7 @@ public class PostfixEvaluator {
                     stack.push(Integer.parseInt(s));
                 }
                 catch (NumberFormatException e) {
-                    throw new PostFixException("Thats not a number bro");
+                    throw new PostFixException("That is not a real number");
                 }
             }
 
@@ -60,12 +66,10 @@ public class PostfixEvaluator {
         // Close the Scanner when you are finished.
 
         tokens.close();
-        int numToReturn = stack.pop();
-        if(stack.isEmpty()) {
+        if (stack.size() == 1) {
             return numToReturn;
-        }
-        else {
-            throw new PostFixException("u are so stu[pid uwu");
+        } else {
+            throw new PostFixException("Ill form");
         }
     }
 }
